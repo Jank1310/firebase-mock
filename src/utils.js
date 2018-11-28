@@ -2,6 +2,7 @@
 
 var Snapshot = require('./snapshot');
 var FieldValue = require('./firestore-field-value');
+var FirestoreTimestamp = require('./firestore-timestamp');
 var _ = require('./lodash');
 
 exports.makeRefSnap = function makeRefSnap(ref) {
@@ -108,20 +109,12 @@ exports.removeEmptyRtdbProperties = function removeEmptyRtdbProperties(obj) {
   }
 };
 
-function Timestamp(createdAt) {
-  this._createdAt = createdAt;
-}
-
-Timestamp.prototype.toDate = function () {
-  return new Date(this._createdAt);
-};
-
 exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties(obj) {
   var t = typeof obj;
   if (t === 'boolean' || t === 'string' || t === 'number' || t === 'undefined') {
     return obj;
   }
-  if (obj instanceof Date || obj instanceof Timestamp) return obj;
+  if (obj instanceof Date || obj instanceof FirestoreTimestamp) return obj;
 
   var keys = getKeys(obj);
   if (keys.length > 0) {
@@ -131,7 +124,7 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
         delete obj[s];
       }
       if (FieldValue.serverTimestamp().isEqual(value)) {
-        obj[s] = new Timestamp(value._createdAt);
+        obj[s] = new FirestoreTimestamp(value._createdAt);
       }
     }
   }

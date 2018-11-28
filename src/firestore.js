@@ -6,6 +6,7 @@ var Promise = require('rsvp').Promise;
 var CollectionReference = require('./firestore-collection');
 var DocumentReference = require('./firestore-document');
 var FieldValue = require('./firestore-field-value');
+var FirestoreTimestamp = require('./firestore-timestamp');
 var Queue = require('./queue').Queue;
 var utils = require('./utils');
 var validate = require('./validators');
@@ -27,6 +28,7 @@ function MockFirestore(path, data, parent, name) {
 }
 
 MockFirestore.FieldValue = FieldValue;
+MockFirestore.Timestamp = FirestoreTimestamp;
 
 MockFirestore.prototype.flush = function (delay) {
   this.queue.flush(delay);
