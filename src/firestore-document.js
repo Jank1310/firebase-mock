@@ -128,6 +128,7 @@ MockFirestoreDocument.prototype.set = function (data, opts, callback) {
   }
   var err = this._nextErr('set');
   data = _.cloneDeep(data);
+  data = utils.removeEmptyFirestoreProperties(data);
   var self = this;
   return new Promise(function (resolve, reject) {
     self._defer('set', _.toArray(arguments), function () {
