@@ -108,12 +108,20 @@ exports.removeEmptyRtdbProperties = function removeEmptyRtdbProperties(obj) {
   }
 };
 
+function Timestamp(createdAt) {
+  this._createdAt = createdAT;
+}
+
+Timestamp.prototype.toDate = function () {
+  return new Date(this._createdAt);
+}
+
 exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties(obj) {
   var t = typeof obj;
   if (t === 'boolean' || t === 'string' || t === 'number' || t === 'undefined') {
     return obj;
   }
-  if (obj instanceof Date) return obj;
+  if (obj instanceof Date || obj instanceof Timestamp) return obj;
 
   var keys = getKeys(obj);
   if (keys.length > 0) {
@@ -123,11 +131,7 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
         delete obj[s];
       }
       if (FieldValue.serverTimestamp().isEqual(value)) {
-        obj[s] = function Timestamp() { 
-          this.toDate = function() {
-            return new Date(value._createdAt);
-          }
-        }
+        obj[s] = new Timestamp(value._createdAt)
       }
     }
   }
