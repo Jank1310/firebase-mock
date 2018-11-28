@@ -124,7 +124,7 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
       }
       if (FieldValue.serverTimestamp().isEqual(value)) {
         obj[s] = function Timestamp() { 
-          this.toDate: function() {
+          this.toDate = function() {
             return new Date(value._createdAt);
           }
         }
