@@ -4,9 +4,6 @@ function MockFirestoreFieldValue(type) {
   this.type = type;
   if(this.type === 'serverTimestamp') {
     this._createdAt = new Date()
-    this.toDate = function() {
-      return new Date(this._createdAt);
-    }
   }
 }
 
