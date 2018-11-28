@@ -109,7 +109,7 @@ exports.removeEmptyRtdbProperties = function removeEmptyRtdbProperties(obj) {
 };
 
 function Timestamp(createdAt) {
-  this._createdAt = createdAT;
+  this._createdAt = createdAt;
 }
 
 Timestamp.prototype.toDate = function () {
@@ -131,7 +131,7 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
         delete obj[s];
       }
       if (FieldValue.serverTimestamp().isEqual(value)) {
-        obj[s] = new Timestamp(value._createdAt)
+        obj[s] = new Timestamp(value._createdAt);
       }
     }
   }
