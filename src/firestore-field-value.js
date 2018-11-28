@@ -3,7 +3,7 @@
 function MockFirestoreFieldValue(type) {
   this.type = type;
   if(this.type === 'serverTimestamp') {
-    this._createdAt = new Date()
+    this._createdAt = new Date();
   }
 }
 

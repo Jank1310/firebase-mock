@@ -114,7 +114,7 @@ function Timestamp(createdAt) {
 
 Timestamp.prototype.toDate = function () {
   return new Date(this._createdAt);
-}
+};
 
 exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties(obj) {
   var t = typeof obj;
