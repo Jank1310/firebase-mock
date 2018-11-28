@@ -123,7 +123,11 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
         delete obj[s];
       }
       if (FieldValue.serverTimestamp().isEqual(value)) {
-        obj[s] = new Date();
+        obj[s] = function Timestamp() { 
+          this.toDate: function() {
+            return new Date(value._createdAt);
+          }
+        }
       }
     }
   }
