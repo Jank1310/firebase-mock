@@ -3,29 +3,34 @@
   https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/Bucket
 */
 
-'use strict';
-var Promise = require('rsvp').Promise;
-var MockStorageFile = require('./storage-file');
+"use strict";
+var Promise = require("rsvp").Promise;
+var MockStorageFile = require("./storage-file");
+var _ = require("./lodash");
 
 function MockStorageBucket(storage, name) {
   this.storage = storage;
   this.name = name;
   this.files = {};
-  this.storage.buckets[name] = this;
+  if (this.storage.buckets[name]) {
+    this.files = _.cloneDeep(this.storage.buckets[name].files);
+  } else {
+    this.storage.buckets[name] = this;
+  }
 }
 
-MockStorageBucket.prototype.file = function (name) {
+MockStorageBucket.prototype.file = function(name) {
   return new MockStorageFile(this, name);
 };
 
-MockStorageBucket.prototype.deleteFile = function (name) {
+MockStorageBucket.prototype.deleteFile = function(name) {
   if (this.files[name]) {
     delete this.files[name];
   }
   return Promise.resolve();
 };
 
-MockStorageBucket.prototype.getFiles = function (query) {
+MockStorageBucket.prototype.getFiles = function(query) {
   var self = this;
   var files = [];
   Object.keys(this.files).forEach(function(name) {
@@ -38,7 +43,7 @@ MockStorageBucket.prototype.getFiles = function (query) {
   return Promise.resolve(files);
 };
 
-MockStorageBucket.prototype.deleteFiles = function (query) {
+MockStorageBucket.prototype.deleteFiles = function(query) {
   var self = this;
   Object.keys(this.files).forEach(function(name) {
     if (!query || !query.prefix) {
@@ -50,7 +55,7 @@ MockStorageBucket.prototype.deleteFiles = function (query) {
   return Promise.resolve();
 };
 
-MockStorageBucket.prototype.moveFile = function (oldPath, newPath) {
+MockStorageBucket.prototype.moveFile = function(oldPath, newPath) {
   this.files[newPath] = this.files[oldPath];
   this.files[newPath].name = newPath;
   return this.deleteFile(oldPath);
