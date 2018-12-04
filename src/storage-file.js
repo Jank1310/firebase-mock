@@ -3,10 +3,11 @@
   https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File
 */
 
-'use strict';
-var Promise = require('rsvp').Promise;
-var fs = require('fs');
-var _ = require('./lodash');
+"use strict";
+var Promise = require("rsvp").Promise;
+var fs = require("fs");
+var Readable = require("stream").Readable;
+var _ = require("./lodash");
 
 function MockStorageFile(bucket, name) {
   this.bucket = bucket;
@@ -55,6 +56,13 @@ MockStorageFile.prototype.download = function(args) {
   });
 };
 
+MockStorageFile.prototype.createReadStream = function() {
+  var stream = new Readable();
+  stream.push(this._contents);
+  stream.push(null);
+  return stream;
+};
+
 MockStorageFile.prototype.delete = function() {
   this._contents = null;
   return this.bucket.deleteFile(this.name);
@@ -63,10 +71,10 @@ MockStorageFile.prototype.delete = function() {
 MockStorageFile.prototype.move = function(destination) {
   var oldPath = this.name;
 
-  if (typeof destination === 'string') {
+  if (typeof destination === "string") {
     // destination is a path string
     return this.bucket.moveFile(oldPath, destination);
-  } else if (typeof destination.bucket !== 'undefined') {
+  } else if (typeof destination.bucket !== "undefined") {
     // destination is a File object
     return this.bucket.moveFile(oldPath, destination.name);
   } else {
