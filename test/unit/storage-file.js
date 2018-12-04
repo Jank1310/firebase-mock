@@ -28,6 +28,15 @@ describe("StorageFile", function() {
       var file = new StorageFile(bucket, "filename");
       expect(file.bucket).to.equal(bucket);
     });
+
+    it("should copy content from existing file", function(done) {
+      var file = new StorageFile(bucket, "filename-existing");
+      file.save("some content").then(function() {
+        var sameFile = new StorageFile(bucket, "filename-existing");
+        expect(sameFile._contents).to.equal("some content");
+        done();
+      });
+    });
   });
 
   describe("#get", function() {

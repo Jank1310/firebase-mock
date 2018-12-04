@@ -16,6 +16,9 @@ function MockStorageFile(bucket, name) {
   this._metadata = null;
   if (!this.bucket.files[name]) {
     this.bucket.files[name] = this;
+  } else {
+    this._contents = this.bucket.files[name]._contents;
+    this._metadata = this.bucket.files[name]._metadata;
   }
 }
 
