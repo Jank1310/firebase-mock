@@ -132,6 +132,9 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
       if (FieldValue.increment().isEqual(value)) {
         obj[s] = (base ? base[s] || 0 : 0) + value._incrementValue;
       }
+      if (FieldValue.serverTimestamp().isEqual(value)) {
+        obj[s] = new FirestoreTimestamp(value._createdAt);
+      }
     }
   }
   return obj;
