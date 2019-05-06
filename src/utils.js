@@ -123,8 +123,6 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
       if (FieldValue.delete().isEqual(value)) {
         delete obj[s];
       }
-      if (FieldValue.serverTimestamp().isEqual(value)) {
-        obj[s] = new FirestoreTimestamp(value._createdAt);
       }
     }
   }
