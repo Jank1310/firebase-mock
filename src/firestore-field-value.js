@@ -1,9 +1,12 @@
 'use strict';
 
-function MockFirestoreFieldValue(type) {
+function MockFirestoreFieldValue(type, value) {
   this.type = type;
   if(this.type === 'serverTimestamp') {
     this._createdAt = new Date();
+  }
+  if(this.type === 'increment') {
+    this._incrementValue = value;
   }
 }
 
@@ -20,6 +23,10 @@ MockFirestoreFieldValue.delete = function () {
 
 MockFirestoreFieldValue.serverTimestamp = function () {
   return new MockFirestoreFieldValue('serverTimestamp');
+};
+
+MockFirestoreFieldValue.increment = function (value) {
+  return new MockFirestoreFieldValue('increment', value);
 };
 
 module.exports = MockFirestoreFieldValue;

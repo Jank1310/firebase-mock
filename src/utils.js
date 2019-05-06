@@ -3,6 +3,7 @@
 var Snapshot = require('./snapshot');
 var FieldValue = require('./firestore-field-value');
 var FirestoreTimestamp = require('./firestore-timestamp');
+var FirestoreIncrement = require('./firestore-increment');
 var _ = require('./lodash');
 
 exports.makeRefSnap = function makeRefSnap(ref) {
@@ -109,12 +110,18 @@ exports.removeEmptyRtdbProperties = function removeEmptyRtdbProperties(obj) {
   }
 };
 
-exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties(obj) {
+exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties(obj, base) {
   var t = typeof obj;
   if (t === 'boolean' || t === 'string' || t === 'number' || t === 'undefined') {
     return obj;
   }
-  if (obj instanceof Date || obj instanceof FirestoreTimestamp) return obj;
+  if (
+      obj instanceof Date ||
+      obj instanceof FirestoreTimestamp
+    )
+  {
+    return obj;
+  }
 
   var keys = getKeys(obj);
   if (keys.length > 0) {
@@ -123,6 +130,8 @@ exports.removeEmptyFirestoreProperties = function removeEmptyFirestoreProperties
       if (FieldValue.delete().isEqual(value)) {
         delete obj[s];
       }
+      if (FieldValue.increment().isEqual(value)) {
+        obj[s] = (base ? base[s] || 0 : 0) + value._incrementValue;
       }
     }
   }

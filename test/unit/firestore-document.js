@@ -165,6 +165,19 @@ describe('MockFirestoreDocument', function () {
 
       db.flush();
     });
+
+    it('set value with increment', function (done) {
+      doc.set({
+        val: Firestore.FieldValue.increment(42)
+      });
+
+      doc.get().then(function (snap) {
+        expect(snap.exists).to.equal(true);
+        expect(snap.get('val')).to.equal(42);
+        done();
+      }).catch(done);
+      db.flush();
+    });
   });
 
   describe('#set with {merge: true}', function () {
@@ -374,6 +387,22 @@ describe('MockFirestoreDocument', function () {
         })
         .catch(done);
 
+      db.flush();
+    });
+
+    it('updates value with increment', function (done) {
+      doc.set({
+        val: 0
+      });
+      doc.update({
+        val: Firestore.FieldValue.increment(42)
+      });
+
+      doc.get().then(function (snap) {
+        expect(snap.exists).to.equal(true);
+        expect(snap.get('val')).to.equal(42);
+        done();
+      }).catch(done);
       db.flush();
     });
   });

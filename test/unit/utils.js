@@ -7,6 +7,7 @@ var removeEmptyRtdbProperties = require('../../src/utils').removeEmptyRtdbProper
 var removeEmptyFirestoreProperties = require('../../src/utils').removeEmptyFirestoreProperties;
 var updateToRtdbObject = require('../../src/utils').updateToRtdbObject;
 var updateToFirestoreObject = require('../../src/utils').updateToFirestoreObject;
+var FieldValue = require('../../src/firestore-field-value');
 
 describe('utils', function () {
   describe('removeEmptyRtdbProperties', function () {
@@ -100,6 +101,17 @@ describe('utils', function () {
     });
     it('should return null, when all properties are null ', function () {
       expect(removeEmptyFirestoreProperties({a: {b: null}})).to.eql({a: {b: null}});
+    });
+
+    it('should increment value', function () {
+      var base = {b: 10};
+      var result = removeEmptyFirestoreProperties({a: 1, b: FieldValue.increment(11)}, base);
+      expect(result).to.eql({a: 1, b: 21});
+    });
+
+    it('should increment value without base', function () {
+      var result = removeEmptyFirestoreProperties({a: 1, b: FieldValue.increment(11)});
+      expect(result).to.eql({a: 1, b: 11});
     });
   });
 
