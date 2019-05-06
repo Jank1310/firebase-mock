@@ -392,15 +392,20 @@ describe('MockFirestoreDocument', function () {
 
     it('updates value with increment', function (done) {
       doc.set({
-        val: 0
+        val: 0,
+        nested:{
+          val2: 10
+        }
       });
       doc.update({
-        val: Firestore.FieldValue.increment(42)
+        val: Firestore.FieldValue.increment(42),
+        'nested.val2': Firestore.FieldValue.increment(11)
       });
 
       doc.get().then(function (snap) {
         expect(snap.exists).to.equal(true);
         expect(snap.get('val')).to.equal(42);
+        expect(snap.get('nested.val2')).to.equal(21);
         done();
       }).catch(done);
       db.flush();
