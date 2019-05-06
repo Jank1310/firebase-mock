@@ -3,7 +3,6 @@
 var Snapshot = require('./snapshot');
 var FieldValue = require('./firestore-field-value');
 var FirestoreTimestamp = require('./firestore-timestamp');
-var FirestoreIncrement = require('./firestore-increment');
 var _ = require('./lodash');
 
 exports.makeRefSnap = function makeRefSnap(ref) {
