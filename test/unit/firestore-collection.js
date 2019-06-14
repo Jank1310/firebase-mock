@@ -377,12 +377,15 @@ describe('MockFirestoreCollection', function () {
         });
     });
 
-    it('throws with no order', function () {
-      expect(
-        function () {
-          collection.startAfter(doc2Snap);
-        }
-      ).to.throw();
+    it('uses id if no order', function () {
+      return collection
+        .startAfter(doc2Snap)
+        .limit(2)
+        .get()
+        .then(function(snaps) {
+          expect(snaps.size).to.equal(2);
+          expect(snaps.docs.map(function (d) { return  d.data().a; })).to.deep.equal([3, 4]);
+        });
     });
   });
 

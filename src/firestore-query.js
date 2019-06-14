@@ -190,7 +190,7 @@ MockFirestoreQuery.prototype.startAfter = function (doc) {
   }
 
   if (this.orderedProperties.length === 0) {
-    throw new Error('Query must be ordered to paginate');
+    console.warn('Query should be ordered to paginate otherwise id is used');
   }
 
   var query = this.clone();
