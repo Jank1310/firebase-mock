@@ -13,7 +13,7 @@ function MockStorageBucket(storage, name) {
   this.name = name;
   this.files = {};
   if (this.storage.buckets[name]) {
-    this.files = _.cloneDeep(this.storage.buckets[name].files);
+    this.files = this.storage.buckets[name].files;
   } else {
     this.storage.buckets[name] = this;
   }
